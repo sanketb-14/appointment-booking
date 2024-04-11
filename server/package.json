@@ -5,11 +5,13 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "dev": "cd .. && cd client ",
+    "start": "concurrently \"nodemon server.js\"  \"npm run dev\""
   },
   "author": "sanket",
   "license": "ISC",
   "dependencies": {
+    "concurrently": "^8.2.2",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "mysql2": "^3.9.4",

@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 
 exports.getAllUsers = async (req, res) => {
+    
     try {
         const users = await User.findAll();
         res.status(200).json({
@@ -17,11 +18,12 @@ exports.getAllUsers = async (req, res) => {
 };
 
 exports.addUser = async (req, res) => {
+    
     try {
-        const { username, email, phone, userImg } = req.body;
-        console.log(username);
+        const { id, ...userData } = req.body;
+        
       
-        const newUser = await User.create(req.body);
+        const newUser = await User.create(userData);
         
         res.status(201).json({
             status: 'success',
