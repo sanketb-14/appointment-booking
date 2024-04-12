@@ -1,9 +1,19 @@
 
+import { UsersProvider } from "./context/UsersContext";
+import {BrowserRouter as Router , Routes ,Route } from 'react-router-dom'
+import Home from "./components/Home";
 
 function App() {
   return (
-    <div className="card-title bg-base-300">App</div>
-  )
+    <UsersProvider>
+      <Router>
+        <Routes>
+          <Route path='/' element={<Home/>}/>
+        </Routes>
+        <Home />
+      </Router>
+    </UsersProvider>
+  );
 }
 
-export default App
+export default App;
