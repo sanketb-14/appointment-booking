@@ -7,7 +7,6 @@ const initialState = {
   users: [],
   isLoading: false,
   error: "",
-  change:false
 };
 
 function reducer(state, action) {
@@ -29,7 +28,7 @@ function reducer(state, action) {
         isLoading: false,
 
         users: [...state.users, action.payload],
-        change : true
+        
       };
     case "users/deleted":
       return {
@@ -69,7 +68,7 @@ function UsersProvider({ children }) {
       }
     }
     fetchUser();
-  }, [change]);
+  }, [isLoading]);
 
   async function postUser(newUser) {
     dispatch({ type: "isLoading" });
