@@ -7,7 +7,10 @@ function App() {
   return (
     <UsersProvider>
       <Router>
+<<<<<<< HEAD
         
+=======
+>>>>>>> ca55c763749e4eab637d6a02e9ada984b6493a9c
         <Routes>
           <Route path='/' element={<Home/>}/>
         </Routes>
