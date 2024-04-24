@@ -1,22 +1,33 @@
-
 import { UsersProvider } from "./context/UsersContext";
-import {BrowserRouter as Router , Routes ,Route } from 'react-router-dom'
+import { TablesProvider } from "./context/TableContext";
+import Navbar from "./components/Navbar";
 import Home from "./components/Home";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+
+import AppLayout from "./components/AppLayout";
+import CreateDatabase from "./components/CreateDatabase";
 
 function App() {
   return (
-    <UsersProvider>
-      <Router>
-<<<<<<< HEAD
-        
-=======
->>>>>>> ca55c763749e4eab637d6a02e9ada984b6493a9c
-        <Routes>
-          <Route path='/' element={<Home/>}/>
-        </Routes>
-        <Home />
-      </Router>
-    </UsersProvider>
+    <TablesProvider>
+      <UsersProvider>
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route element={<AppLayout />}>
+              <Route index element={<Navigate replace to="/" />} />
+              <Route path="create-database" element={<CreateDatabase />} />
+              <Route path="/home" element={<Home />} />
+            </Route>
+          </Routes>
+        </Router>
+      </UsersProvider>
+    </TablesProvider>
   );
 }
 

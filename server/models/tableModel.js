@@ -1,15 +1,29 @@
 const { DataTypes } = require('sequelize');
 const db = require('../util/database');
 
-const Table = db.define('Table', {
+function Table() {
+    return db.define('Table', {
 
-    // id: {
-    //     type: DataTypes.INTEGER,
-    //     primaryKey: true,
-    //     autoIncrement: true,
-    // },
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null
+        },
+        phone: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null
+        },
 
-});
+    }, {
+
+        timestamps: false,
+    });
+}
 
 module.exports = Table;
 

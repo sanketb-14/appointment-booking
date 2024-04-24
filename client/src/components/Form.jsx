@@ -3,13 +3,14 @@ import { useUsers } from "../context/UsersContext";
 
 function Form() {
   const { postUser } = useUsers();
+  
 
   const [formData, setFormData] = useState({
     id: new Date().toISOString(),
-    username: "",
+    name: "",
     email: "",
     phone: "",
-    
+    createdAt: new Date().toISOString(),
   });
 
   const handleChange = (e) => {
@@ -20,35 +21,36 @@ function Form() {
     }));
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
     const newUser = {
-      username: formData.username,
+      name: formData.name,
       email: formData.email,
       phone: formData.phone,
-      userImg: formData.userImg,
+     
     };
-    await postUser(newUser);
+    await postUser(newUser)
+    
     setFormData({
       id: new Date().toISOString(),
-      username: "",
+      name: "",
       email: "",
       phone: "",
-      userImg:
-        "https://static.vecteezy.com/system/resources/previ…ol-for-your-website-design-logo-app-ui-vector.jpg",
+     
     });
   };
 
   return (
-    <form className="card-body w-full m-2 sm:w-1/3" onSubmit={handleSubmit}>
+    <form className="card-body w-full m-2 sm:w-2/3" onSubmit={handleSubmit}>
       <div className="form-control">
         <label className="label">
           <span className="label-text">Name</span>
         </label>
         <input
           type="text"
-          name="username"
+          name="name"
           placeholder="Name"
           className="input input-bordered"
           defaultValue={formData.username}

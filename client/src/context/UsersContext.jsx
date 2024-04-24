@@ -4,7 +4,8 @@ import axios from "axios";
 const UsersContext = createContext();
 
 const initialState = {
-  users: [],
+  tableName: "",
+  tableData: [],
   isLoading: false,
   error: "",
 };
@@ -16,25 +17,31 @@ function reducer(state, action) {
         ...state,
         isLoading: true,
       };
-    case "users/loaded":
+    case "users/tableName":
       return {
         ...state,
         isLoading: false,
-        users: action.payload,
+        tableName: action.payload,
+      };
+    case "users/loaded":
+      return {
+        ...state,
+
+        isLoading: false,
+
+        tableData: action.payload,
       };
     case "users/created":
       return {
         ...state,
         isLoading: false,
 
-        users: [...state.users, action.payload],
-        
+        tableData: [...state.tableData, action.payload],
       };
     case "users/deleted":
       return {
         isLoading: false,
-        users: state.users.filter((city) => city.id !== action.payload),
-        change:true
+        tableData: state.tableData.filter((item) => item.id !== action.payload),
       };
     case "rejected":
       return {
@@ -48,35 +55,37 @@ function reducer(state, action) {
 }
 
 function UsersProvider({ children }) {
-  const [{ users, isLoading , change }, dispatch] = useReducer(reducer, initialState);
+  const [{ tableName, tableData, isLoading }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
 
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const res = await axios.get("http://localhost:3000/api/v1/users");
-        const data = res.data;
+  async function getTableData(newTableName) {
+    dispatch({ type: "isLoading" });
+    try {
+      dispatch({ type: "users/tableName", payload: newTableName });
+      const res = await axios.get(
+        `http://localhost:3000/api/v1/users/${newTableName}`
+      );
+      dispatch({type: "isLoading"})
 
-        dispatch({
-          type: "users/loaded",
-          payload: data.data,
-        });
-      } catch (err) {
-        dispatch({
-          type: "rejected",
-          payload: "there was error in loading data",
-        });
-      }
+      dispatch({ type: "users/loaded", payload: res.data.tableData });
+    } catch (err) {
+      dispatch({
+        type: "rejected",
+        payload: "there was an error loading data",
+      });
     }
-    fetchUser();
-  }, [isLoading]);
+  }
 
   async function postUser(newUser) {
     dispatch({ type: "isLoading" });
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/users",
+        `http://localhost:3000/api/v1/users/${tableName}`,
         newUser
       );
+        dispatch({ type: "isLoading" });
       dispatch({
         type: "users/created",
         payload: res,
@@ -91,7 +100,9 @@ function UsersProvider({ children }) {
   async function deleteUser(id) {
     dispatch({ type: "isLoading" });
     try {
-      await axios.delete(`http://localhost:3000/api/v1/users/${id}`);
+      await axios.delete(
+        `http://localhost:3000/api/v1/users/${tableName}/${id}`
+      );
       dispatch({ type: "users/deleted", payload: id });
     } catch (error) {
       dispatch({
@@ -104,7 +115,9 @@ function UsersProvider({ children }) {
   return (
     <UsersContext.Provider
       value={{
-        users,
+        tableName,
+        tableData,
+        getTableData,
         isLoading,
         postUser,
         deleteUser,

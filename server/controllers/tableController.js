@@ -17,6 +17,7 @@ exports.createTable = async (req, res) => {
 };
 
 exports.getTableNames = async(req, res) => {
+    
     try {
         const [results] = await db.query(`
       SELECT table_name
@@ -24,6 +25,8 @@ exports.getTableNames = async(req, res) => {
       WHERE table_schema = 'Students'
       AND table_type = 'BASE TABLE'
     `)
+        
+    
         const tableNames = results.map((result) => result.TABLE_NAME);
     res.status(201).json({
         status:"success",

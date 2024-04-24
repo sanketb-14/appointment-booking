@@ -1,13 +1,32 @@
-const User = require('../models/userModel');
+
+
+const User =require("../models/userModel")
+
 
 exports.getAllUsers = async (req, res) => {
+    const { tableName } = req.params;
     
+
+
     try {
-        const users = await User.findAll();
+        if(!User(tableName)){
+            return res.status(404).json({
+                status: 'error',
+                params: tableName,
+                message: 'Table not found'
+            });
+        }
+        const tableData = await User(tableName).findAll()
         res.status(200).json({
             status: 'success',
-            data: users
+          
+             tableData
         });
+        
+
+
+
+       
     } catch (error) {
         console.error('Error fetching users:', error);
         res.status(500).json({
@@ -18,13 +37,16 @@ exports.getAllUsers = async (req, res) => {
 };
 
 exports.addUser = async (req, res) => {
-    
+
+
     try {
         const { id, ...userData } = req.body;
-        
-      
-        const newUser = await User.create(userData);
-        
+
+        const {tableName} = req.params
+
+
+        const newUser = await User(tableName).create(userData);
+
         res.status(201).json({
             status: 'success',
             data: newUser
@@ -84,9 +106,10 @@ exports.updateUser = async (req, res) => {
     }
 };
 exports.deleteUser = async (req, res) => {
+    const {tableName} = req.params
     try {
         const userId = req.params.id;
-        const deletedRowsCount = await User.destroy({
+        const deletedRowsCount = await User(tableName).destroy({
             where: { id: userId }
         });
         if (deletedRowsCount === 0) {
